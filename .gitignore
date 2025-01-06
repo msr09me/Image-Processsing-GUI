@@ -1,0 +1,20 @@
+# Build output
+build/
+*.o
+*.obj
+*.exe
+
+# IDE-specific files
+*.user
+*.pro.user
+*.qbs.user
+.idea/
+.vscode/
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# OS-specific files
+.DS_Store
+Thumbs.db
