@@ -22,17 +22,17 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_LoadImagePushButton_clicked();
-
-    void on_NegativePushButton_clicked();
-
-    void on_LogPushButton_clicked();
-
-    void on_GammaPushButton_clicked();
-
-    void on_GammaSlider_valueChanged(int value);
-
     void on_UndoPushButton_clicked();
+
+    void on_actionNegative_triggered();
+    void on_actionLog_triggered();
+    void on_actionGamma_triggered();
+
+    void on_actionLoad_Image_triggered();
+
+    void on_RedoPushushButton_clicked();
+
+    void on_GammaSlider_sliderReleased();
 
 private:
     Ui::MainWindow *ui;
@@ -44,5 +44,6 @@ private:
     Image originalImage;
     Image image;
     Image previousImage;
+    Image redoImage;
 };
 #endif // MAINWINDOW_H
