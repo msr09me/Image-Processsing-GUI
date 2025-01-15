@@ -26,6 +26,8 @@ set(PROJECT_SOURCES
     imageprocessingbackend.h
     ImageIO.h
     IntensityTransformations.h
+    ImageFilter.cpp
+    ImageFilter.h
 )
 
 # Define the executable

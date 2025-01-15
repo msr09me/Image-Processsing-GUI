@@ -2,9 +2,10 @@
 #define IMAGE_TRANSFORMS_H
 
 #include <stdint.h> // For uint8_t
+#include "ImageIO.h"
 
-void applyNegative(uint8_t *buffer, int width, int height, int bitDepth);
-void applyLogTransform(uint8_t *buffer, int width, int height, int bitDepth, double c);
-void applyGammaTransform(uint8_t *buffer, int width, int height, int bitDepth, double c, double gamma);
+void applyNegative(uint8_t *buffer, const ImageMetadata &meta);
+void applyLogTransform(uint8_t *buffer, const ImageMetadata &meta, double c);
+void applyGammaTransform(uint8_t *buffer, const ImageMetadata &meta, double c, double gamma);
 
 #endif // IMAGE_TRANSFORMS_H
