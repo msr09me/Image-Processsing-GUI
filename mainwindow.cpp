@@ -46,6 +46,19 @@ MainWindow::~MainWindow()
 
 }
 
+// Function to display image
+void MainWindow::updateImageDisplay(const ImageReadResult &image, QLabel *label)
+{
+    if (!image.buffer) {
+        qDebug() << "No image data to display.";
+        return;
+    }
+
+    QImage displayImage(image.buffer->data(), image.meta.width, image.meta.height, QImage::Format_Grayscale8);
+    QImage flippedImage = displayImage.mirrored(false, true); // Flip vertically
+    label->setPixmap(QPixmap::fromImage(flippedImage.scaled(label->size(), Qt::KeepAspectRatio)));
+}
+
 // Load Image
 
 void MainWindow::on_actionLoad_Image_triggered()
@@ -68,9 +81,7 @@ void MainWindow::on_actionLoad_Image_triggered()
     resultImage = originalImage;
 
     // Display the image in the original image QLabel
-    QImage displayImage(originalImage.buffer->data(), originalImage.meta.width, originalImage.meta.height, QImage::Format_Grayscale8);
-    ui->OriginalWindowLabel->setPixmap(QPixmap::fromImage(displayImage.scaled(ui->OriginalWindowLabel->size(), Qt::KeepAspectRatio)));
-
+    updateImageDisplay(originalImage, ui->OriginalWindowLabel);
 }
 
 
@@ -86,10 +97,7 @@ void MainWindow::on_UndoPushButton_clicked()
     redoImage = resultImage;
     resultImage = previousImage;
 
-    // Update the result window
-    QImage qResultImage(resultImage.buffer->data(), resultImage.meta.width, resultImage.meta.height, QImage::Format_Grayscale8);
-
-    ui->ResultWindowLabel->setPixmap(QPixmap::fromImage(qResultImage.scaled(ui->ResultWindowLabel->size(), Qt::KeepAspectRatio)));
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
 
     QMessageBox::information(this, tr("Undo"), tr("Reverted to the previous state."));
 
@@ -107,10 +115,7 @@ void MainWindow::on_RedoPushushButton_clicked()
     previousImage = resultImage;
     resultImage = redoImage;
 
-    // Update the result window
-    QImage qResultImage(resultImage.buffer->data(), resultImage.meta.width, resultImage.meta.height, QImage::Format_Grayscale8);
-
-    ui->ResultWindowLabel->setPixmap(QPixmap::fromImage(qResultImage.scaled(ui->ResultWindowLabel->size(), Qt::KeepAspectRatio)));
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
 
     QMessageBox::information(this, tr("Redo"), tr("Redone the previous undo action."));
 
@@ -136,10 +141,8 @@ void MainWindow::on_actionNegative_triggered() {
     qDebug() << "Negative Transformation Completed";
 
     // Update the result window
-    QImage qResultImage(resultImage.buffer->data(), resultImage.meta.width, resultImage.meta.height, QImage::Format_Grayscale8);
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
 
-    ui->ResultWindowLabel->setPixmap(QPixmap::fromImage(qResultImage.scaled(ui->ResultWindowLabel->size(), Qt::KeepAspectRatio)));
-    ui->ResultWindowLabel->repaint();
 }
 
 void MainWindow::on_actionLog_triggered() {
@@ -159,10 +162,8 @@ void MainWindow::on_actionLog_triggered() {
 
     qDebug() << "Log Transformation Completed";
 
-    // Update the result window
-    QImage qResultImage(resultImage.buffer->data(), resultImage.meta.width, resultImage.meta.height, QImage::Format_Grayscale8);
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
 
-    ui->ResultWindowLabel->setPixmap(QPixmap::fromImage(qResultImage.scaled(ui->ResultWindowLabel->size(), Qt::KeepAspectRatio)));
 
 }
 
@@ -185,10 +186,8 @@ void MainWindow::on_actionGamma_triggered() {
 
     qDebug() << "Gamma Transformation Completed";
 
-    // Update the result window
-    QImage qResultImage(resultImage.buffer->data(), resultImage.meta.width, resultImage.meta.height, QImage::Format_Grayscale8);
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
 
-    ui->ResultWindowLabel->setPixmap(QPixmap::fromImage(qResultImage.scaled(ui->ResultWindowLabel->size(), Qt::KeepAspectRatio)));
 }
 
 void MainWindow::on_GammaSlider_sliderReleased()
@@ -211,10 +210,8 @@ void MainWindow::on_GammaSlider_sliderReleased()
     qDebug() << "Applying gamma transformation";
     applyGammaTransform(&resultImage, 1.0, gammaValue);
 
-    // Update the result window
-    QImage qResultImage(resultImage.buffer->data(), resultImage.meta.width, resultImage.meta.height, QImage::Format_Grayscale8);
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
 
-    ui->ResultWindowLabel->setPixmap(QPixmap::fromImage(qResultImage.scaled(ui->ResultWindowLabel->size(), Qt::KeepAspectRatio)));
 }
 
 
@@ -286,9 +283,8 @@ void MainWindow::applyFilter(FilterType filterType)
         return;
     }
 
-    QImage qResultImage(resultImage.buffer->data(), resultImage.meta.width, resultImage.meta.height, QImage::Format_Grayscale8);
-    ui->ResultWindowLabel->setPixmap(QPixmap::fromImage(qResultImage.scaled(ui->ResultWindowLabel->size(), Qt::KeepAspectRatio)));
-    ui->ResultWindowLabel->update();
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+
 }
 
 void MainWindow::on_actionBox_Filter_triggered()
@@ -309,5 +305,119 @@ void MainWindow::on_actionMedian_Filter_triggered()
 {
     activeFilter = FilterType::Median;
     applyFilter(activeFilter);
+}
+
+
+void MainWindow::on_actionBasic_Laplacian_triggered()
+{
+    qDebug() << "Applying highpass filter with Basic Laplacian";
+    previousImage = resultImage;
+    highpassFilter(previousImage, resultImage, 1);
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+    qDebug() << "Highpass filter with Basic Laplacian completed";
+}
+
+
+void MainWindow::on_actionFull_Laplacian_triggered()
+{
+    qDebug() << "Applying highpass filter with Full Laplacian";
+    previousImage = resultImage;
+    highpassFilter(previousImage, resultImage, 2);
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+    qDebug() << "Highpass filter with Full Laplacian completed";
+}
+
+
+void MainWindow::on_actionBasic_Inverted_Laplacian_triggered()
+{
+    qDebug() << "Applying highpass filter with Basic Inverted Laplacian";
+    previousImage = resultImage;
+    highpassFilter(previousImage, resultImage, 3);
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+    qDebug() << "Highpass filter with Basic Inverted Laplacian completed";
+}
+
+
+void MainWindow::on_actionFull_Inverted_Laplacian_triggered()
+{
+    qDebug() << "Applying highpass filter with Full Inverted Laplacian";
+    previousImage = resultImage;
+    highpassFilter(previousImage, resultImage, 4);
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+    qDebug() << "Highpass filter with Full Inverted Laplacian completed";
+}
+
+
+void MainWindow::on_actionSobel_triggered()
+{
+    qDebug() << "Applying highpass filter with Sobel Operator";
+    previousImage = resultImage;
+    highpassFilter(previousImage, resultImage, 5);
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+    qDebug() << "Highpass filter with Sobel completed";
+}
+
+
+void MainWindow::on_actionBasic_Laplacian_2_triggered()
+{
+    qDebug() << "Applying image sharpening with basic laplacian highpass filter";
+    previousImage = resultImage;
+    imageSharpening(previousImage, resultImage, 1);
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+    qDebug() << "Completed image sharpening with basic laplacian highpass filter";
+}
+
+
+void MainWindow::on_actionFull_Laplacian_2_triggered()
+{
+    qDebug() << "Applying image sharpening with full laplacian highpass filter";
+    previousImage = resultImage;
+    imageSharpening(previousImage, resultImage, 2);
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+    qDebug() << "Completed image sharpening with full laplacian highpass filter";
+}
+
+
+void MainWindow::on_actionBaisc_Inverted_Laplacian_triggered()
+{
+    qDebug() << "Applying image sharpening with basic inverted laplacian highpass filter";
+    previousImage = resultImage;
+    imageSharpening(previousImage, resultImage, 3);
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+    qDebug() << "Completed image sharpening with basic inverted laplacian highpass filter";
+}
+
+
+void MainWindow::on_actionFull_Inverted_Laplacian_2_triggered()
+{
+    qDebug() << "Applying image sharpening with full inverted laplacian highpass filter";
+    previousImage = resultImage;
+    imageSharpening(previousImage, resultImage, 4);
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+    qDebug() << "Completed image sharpening with full inverted laplacian highpass filter";
+}
+
+
+void MainWindow::on_actionSobel_2_triggered()
+{
+    qDebug() << "Applying image sharpening with soble highpass filter";
+    previousImage = resultImage;
+    imageSharpening(previousImage, resultImage, 5);
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+    qDebug() << "Completed image sharpening with sobel highpass filter";
+}
+
+
+
+
+void MainWindow::on_actionUnsharp_Maksing_Highboost_Filtering_triggered()
+{
+    qDebug() << "Applying Unsharp Masking";
+    previousImage = resultImage;
+
+
+
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+    qDebug() << "Completed Unsharp Masking";
 }
 

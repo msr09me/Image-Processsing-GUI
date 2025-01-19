@@ -74,3 +74,46 @@ void medianFilter(const ImageReadResult &inputImage, ImageReadResult &outputImag
         throw std::runtime_error(std::string("Median Filter failed: ") + e.what());
     }
 }
+
+
+void highpassFilter(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelChoice){
+    if (!inputImage.buffer.has_value() || !inputImage.meta.isValid()) {
+        throw std::invalid_argument("Invalid input image!");
+    }
+
+    try {
+        auto filteredBuffer = applyHighPassFilter(inputImage, kernelChoice);
+        outputImage = inputImage; // copy the metadata
+        outputImage.buffer = std::make_optional(filteredBuffer);
+    } catch (const std::exception &e) {
+        throw std::runtime_error(std::string("Highpass Filter failed: ") + e.what());
+    }
+}
+
+void imageSharpening(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelChoice){
+    if (!inputImage.buffer.has_value() || !inputImage.meta.isValid()) {
+        throw std::invalid_argument("Invalid input image!");
+    }
+
+    try {
+        auto filteredBuffer = applyImageSharpening(inputImage, kernelChoice);
+        outputImage = inputImage; // copy the metadata
+        outputImage.buffer = std::make_optional(filteredBuffer);
+    } catch (const std::exception &e) {
+        throw std::runtime_error(std::string("Image sharpening failed: ") + e.what());
+    }
+}
+
+void umhbf(const ImageReadResult &inputImage, ImageReadResult &outputImage, double k){
+    if (!inputImage.buffer.has_value() || !inputImage.meta.isValid()) {
+        throw std::invalid_argument("Invalid input image!");
+    }
+
+    try {
+        auto filteredBuffer = applyUMHBF(inputImage, k);
+        outputImage = inputImage; // copy the metadata
+        outputImage.buffer = std::make_optional(filteredBuffer);
+    } catch (const std::exception &e) {
+        throw std::runtime_error(std::string("Image sharpening failed: ") + e.what());
+    }
+}

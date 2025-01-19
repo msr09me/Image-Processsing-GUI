@@ -1,0 +1,12 @@
+QMainWindow {
+    background-color: #2e2e2e; /* Dark background */
+}
+QPushButton {
+    background-color: #0078D7; /* Blue buttons */
+    color: white;
+    border-radius: 5px;
+    padding: 10px 15px;
+}
+QPushButton:hover {
+    background-color: #0056A3; /* Darker blue on hover */
+}

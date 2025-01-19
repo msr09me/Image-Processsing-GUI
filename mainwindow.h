@@ -4,11 +4,13 @@
 #include <QMainWindow>
 #include <QString>
 #include <QImage>
+#include <QLabel>
 
 #include "imageprocessingbackend.h"
 #include "ImageFilter.h"
 
 enum FilterType { Box, Gaussian, Median };
+enum kernelType {BasicLaplacian, FullLaplacian, BasicInvertedLaplacian, FullInvertedLaplacian};
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -48,6 +50,28 @@ private slots:
 
     void on_actionMedian_Filter_triggered();
 
+    void on_actionBasic_Laplacian_triggered();
+
+    void on_actionFull_Laplacian_triggered();
+
+    void on_actionBasic_Inverted_Laplacian_triggered();
+
+    void on_actionFull_Inverted_Laplacian_triggered();
+
+    void on_actionSobel_triggered();
+
+    void on_actionBasic_Laplacian_2_triggered();
+
+    void on_actionFull_Laplacian_2_triggered();
+
+    void on_actionBaisc_Inverted_Laplacian_triggered();
+
+    void on_actionFull_Inverted_Laplacian_2_triggered();
+
+    void on_actionSobel_2_triggered();
+
+    void on_actionUnsharp_Maksing_Highboost_Filtering_triggered();
+
 private:
     Ui::MainWindow *ui;
     // Member variables
@@ -62,5 +86,6 @@ private:
 
     FilterType activeFilter = FilterType::Box; // Declare activeFilter here
     void applyFilter(FilterType filterType);
+    void updateImageDisplay(const ImageReadResult &image, QLabel *label);
 };
 #endif // MAINWINDOW_H

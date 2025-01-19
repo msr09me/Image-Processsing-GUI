@@ -225,7 +225,30 @@
      <addaction name="actionGaussian_Filter"/>
      <addaction name="actionMedian_Filter"/>
     </widget>
+    <widget class="QMenu" name="menuHigh_Pass_Filter">
+     <property name="title">
+      <string>High Pass Filter</string>
+     </property>
+     <addaction name="actionBasic_Laplacian"/>
+     <addaction name="actionFull_Laplacian"/>
+     <addaction name="actionBasic_Inverted_Laplacian"/>
+     <addaction name="actionFull_Inverted_Laplacian"/>
+     <addaction name="actionSobel"/>
+    </widget>
+    <widget class="QMenu" name="menuImage_Sharpen">
+     <property name="title">
+      <string>Image Sharpen</string>
+     </property>
+     <addaction name="actionBasic_Laplacian_2"/>
+     <addaction name="actionFull_Laplacian_2"/>
+     <addaction name="actionBaisc_Inverted_Laplacian"/>
+     <addaction name="actionFull_Inverted_Laplacian_2"/>
+     <addaction name="actionSobel_2"/>
+    </widget>
     <addaction name="menuLow_Pass_Filter"/>
+    <addaction name="menuHigh_Pass_Filter"/>
+    <addaction name="menuImage_Sharpen"/>
+    <addaction name="actionUnsharp_Maksing_Highboost_Filtering"/>
    </widget>
    <addaction name="menuIntensity_Transformation"/>
    <addaction name="menuFile"/>
@@ -273,6 +296,61 @@
   <action name="actionMedian_Filter">
    <property name="text">
     <string>Median Filter</string>
+   </property>
+  </action>
+  <action name="actionBasic_Laplacian">
+   <property name="text">
+    <string>Basic Laplacian</string>
+   </property>
+  </action>
+  <action name="actionFull_Laplacian">
+   <property name="text">
+    <string>Full Laplacian</string>
+   </property>
+  </action>
+  <action name="actionBasic_Inverted_Laplacian">
+   <property name="text">
+    <string>Basic Inverted Laplacian</string>
+   </property>
+  </action>
+  <action name="actionFull_Inverted_Laplacian">
+   <property name="text">
+    <string>Full Inverted Laplacian</string>
+   </property>
+  </action>
+  <action name="actionSobel">
+   <property name="text">
+    <string>Sobel</string>
+   </property>
+  </action>
+  <action name="actionBasic_Laplacian_2">
+   <property name="text">
+    <string>Basic Laplacian</string>
+   </property>
+  </action>
+  <action name="actionFull_Laplacian_2">
+   <property name="text">
+    <string>Full Laplacian</string>
+   </property>
+  </action>
+  <action name="actionBaisc_Inverted_Laplacian">
+   <property name="text">
+    <string>Baisc Inverted Laplacian</string>
+   </property>
+  </action>
+  <action name="actionFull_Inverted_Laplacian_2">
+   <property name="text">
+    <string>Full Inverted Laplacian</string>
+   </property>
+  </action>
+  <action name="actionSobel_2">
+   <property name="text">
+    <string>Sobel</string>
+   </property>
+  </action>
+  <action name="actionUnsharp_Maksing_Highboost_Filtering">
+   <property name="text">
+    <string>Unsharp Maksing &amp; Highboost Filtering</string>
    </property>
   </action>
  </widget>

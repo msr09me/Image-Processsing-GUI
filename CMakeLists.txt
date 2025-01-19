@@ -37,6 +37,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         ImageIO.cpp
         IntensityTransformations.cpp
+        styles.qss
     )
 else()
     if(ANDROID)
@@ -77,3 +78,6 @@ install(TARGETS ImageProcessingGUI
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(ImageProcessingGUI)
 endif()
+
+# Copy styles.qss to the build directory
+configure_file(styles.qss ${CMAKE_BINARY_DIR}/styles.qss COPYONLY)

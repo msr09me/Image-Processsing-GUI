@@ -23,4 +23,8 @@ void applyGammaTransform(ImageReadResult *image, double c, double gamma);
 void boxFilter(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelSize);
 void gaussianFilter(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelSize, double sigma);
 void medianFilter(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelSize);
+
+void highpassFilter(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelChoice);
+void imageSharpening(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelChoice);
+void umhbf(const ImageReadResult &inputImage, ImageReadResult &outputImage, double k);
 #endif // IMAGE_PROCESSING_BACKEND_H
