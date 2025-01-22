@@ -2,10 +2,9 @@
 #define IMAGE_PROCESSING_BACKEND_H
 
 #include <stdint.h>
-#include <stdexcept>
+
 #include "ImageIO.h"
-#include "IntensityTransformations.h"
-#include "ImageFilter.h"
+
 
 typedef struct {
     uint8_t *data;
@@ -27,4 +26,7 @@ void medianFilter(const ImageReadResult &inputImage, ImageReadResult &outputImag
 void highpassFilter(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelChoice);
 void imageSharpening(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelChoice);
 void umhbf(const ImageReadResult &inputImage, ImageReadResult &outputImage, double k);
+
+// Image converters
+void grayscaleToBinary(const ImageReadResult &inputImage, ImageReadResult &outputImage, int threshold);
 #endif // IMAGE_PROCESSING_BACKEND_H

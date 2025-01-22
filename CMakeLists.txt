@@ -38,6 +38,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ImageIO.cpp
         IntensityTransformations.cpp
         styles.qss
+        ImageConverter.cpp
+        ImageConverter.h
     )
 else()
     if(ANDROID)

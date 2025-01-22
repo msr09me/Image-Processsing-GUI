@@ -72,8 +72,29 @@ private slots:
 
     void on_actionUnsharp_Maksing_Highboost_Filtering_triggered();
 
+    // Image converter
+
+    void on_actionGrayscale_to_Binary_triggered(); // Slot for menu action
+    void on_ThresholdSlider_valueChanged(int value); // Slot for slider
+    void on_ThresholdSpinBox_valueChanged(int value); // Slot for spinbox
+    void on_ImageConverterPushButton_clicked(); // Slot for convert button
+
+
+
+
 private:
     Ui::MainWindow *ui;
+
+    // Helper functions to hide the control elements on the ui
+    void hideControlElements();          // Hide all the elements
+    void hideGammaSlider();             // Hide the gamma slider
+    void hideConversionControls();      // Hide conversion elemetns
+    void hideKernelSize();              // Hide the kernel size elements
+
+    // Helper function to show control elements on the ui
+    void showGammaSlider();              // Show the gamma slider
+    void showkernelSize();               // Show kernel size elements
+    void showConversionControls();       // Show control elements for image conversion
     // Member variables
     QString inputImagePath; // To store the file path of the loaded image
    // QImage originalImage;   // To store the original image
@@ -87,5 +108,7 @@ private:
     FilterType activeFilter = FilterType::Box; // Declare activeFilter here
     void applyFilter(FilterType filterType);
     void updateImageDisplay(const ImageReadResult &image, QLabel *label);
+
+
 };
 #endif // MAINWINDOW_H

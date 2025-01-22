@@ -1,12 +1,24 @@
-QMainWindow {
-    background-color: #2e2e2e; /* Dark background */
+QMenuBar {
+    background-color: #353535; /* Background color for the menu bar */
+    color: white;             /* Text color for the menu items */
 }
-QPushButton {
-    background-color: #0078D7; /* Blue buttons */
-    color: white;
-    border-radius: 5px;
-    padding: 10px 15px;
+
+QMenuBar::item {
+    background-color: transparent; /* Transparent background for menu items */
+    color: white;                  /* Text color for menu items */
 }
-QPushButton:hover {
-    background-color: #0056A3; /* Darker blue on hover */
+
+QMenuBar::item:selected { /* Highlighted menu item */
+    background-color: #2a82da; /* Highlight background color */
+    color: white;             /* Highlight text color */
+}
+
+QMenu {
+    background-color: #353535; /* Background color for dropdown menus */
+    color: white;              /* Text color for menu items */
+}
+
+QMenu::item:selected { /* Highlighted dropdown item */
+    background-color: #2a82da; /* Highlight background color */
+    color: white;              /* Highlight text color */
 }

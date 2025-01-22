@@ -126,53 +126,93 @@
      <iconset theme="QIcon::ThemeIcon::EditRedo"/>
     </property>
    </widget>
-   <widget class="QSpinBox" name="kernelSizeSpinBox">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>570</x>
       <y>10</y>
-      <width>42</width>
-      <height>22</height>
+      <width>270</width>
+      <height>26</height>
      </rect>
     </property>
-    <property name="minimum">
-     <number>3</number>
-    </property>
-    <property name="singleStep">
-     <number>2</number>
-    </property>
+    <layout class="QGridLayout" name="gridLayoutImageConverter">
+     <item row="0" column="0">
+      <widget class="QLabel" name="ThresholdLabel">
+       <property name="text">
+        <string>Threshold</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QSlider" name="ThresholdSlider">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="singleStep">
+        <number>1</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QSpinBox" name="ThresholdSpinBox">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QPushButton" name="ImageConverterPushButton">
+       <property name="text">
+        <string>Convert</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
-   <widget class="QSlider" name="kernelSizeSlider">
-    <property name="geometry">
-     <rect>
-      <x>330</x>
-      <y>10</y>
-      <width>160</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>3</number>
-    </property>
-    <property name="singleStep">
-     <number>5</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Orientation::Horizontal</enum>
-    </property>
-   </widget>
-   <widget class="QLabel" name="kernelSize">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
       <x>248</x>
       <y>10</y>
-      <width>61</width>
-      <height>20</height>
+      <width>187</width>
+      <height>24</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Kernel Size</string>
-    </property>
+    <layout class="QHBoxLayout" name="horizontalLayoutKernel">
+     <item>
+      <widget class="QLabel" name="kernelSize">
+       <property name="text">
+        <string>Kernel Size</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="kernelSizeSlider">
+       <property name="minimum">
+        <number>3</number>
+       </property>
+       <property name="singleStep">
+        <number>5</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="kernelSizeSpinBox">
+       <property name="minimum">
+        <number>3</number>
+       </property>
+       <property name="singleStep">
+        <number>2</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -181,14 +221,27 @@
      <x>0</x>
      <y>0</y>
      <width>1060</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>11</pointsize>
+     <bold>false</bold>
+    </font>
    </property>
    <property name="autoFillBackground">
     <bool>false</bool>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(215, 229, 234);</string>
+    <string notr="true">color: rgb(0, 0, 0);</string>
    </property>
    <widget class="QMenu" name="menuIntensity_Transformation">
     <property name="geometry">
@@ -250,9 +303,16 @@
     <addaction name="menuImage_Sharpen"/>
     <addaction name="actionUnsharp_Maksing_Highboost_Filtering"/>
    </widget>
+   <widget class="QMenu" name="menuConverter">
+    <property name="title">
+     <string>Converter</string>
+    </property>
+    <addaction name="actionGrayscale_to_Binary"/>
+   </widget>
    <addaction name="menuIntensity_Transformation"/>
    <addaction name="menuFile"/>
    <addaction name="menuSpatial_Transformation"/>
+   <addaction name="menuConverter"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNegative">
@@ -351,6 +411,11 @@
   <action name="actionUnsharp_Maksing_Highboost_Filtering">
    <property name="text">
     <string>Unsharp Maksing &amp; Highboost Filtering</string>
+   </property>
+  </action>
+  <action name="actionGrayscale_to_Binary">
+   <property name="text">
+    <string>Grayscal to Binary</string>
    </property>
   </action>
  </widget>

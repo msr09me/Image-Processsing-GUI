@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdexcept>
+#include "IntensityTransformations.h"
+#include "ImageFilter.h"
+#include "ImageConverter.h"
 
 // Function to load an image from a file
 #include <algorithm> // For std::reverse
@@ -113,6 +117,19 @@ void umhbf(const ImageReadResult &inputImage, ImageReadResult &outputImage, doub
         auto filteredBuffer = applyUMHBF(inputImage, k);
         outputImage = inputImage; // copy the metadata
         outputImage.buffer = std::make_optional(filteredBuffer);
+    } catch (const std::exception &e) {
+        throw std::runtime_error(std::string("Image sharpening failed: ") + e.what());
+    }
+}
+
+void grayscaleToBinary(const ImageReadResult &inputImage, ImageReadResult &outputImage, int threshold){
+    if (!inputImage.buffer.has_value() || !inputImage.meta.isValid()) {
+        throw std::invalid_argument("Invalid input image!");
+    }
+    try {
+        auto convertedBuffer = applyGrayscaleToBinary(inputImage, threshold);
+        outputImage = inputImage; // copy the metadata
+        outputImage.buffer = std::make_optional(convertedBuffer);
     } catch (const std::exception &e) {
         throw std::runtime_error(std::string("Image sharpening failed: ") + e.what());
     }

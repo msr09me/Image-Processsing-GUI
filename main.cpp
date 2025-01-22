@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
         qDebug() << "Could not load QSS file.";
     }
 
+
     MainWindow w;
     w.show();
     return a.exec();

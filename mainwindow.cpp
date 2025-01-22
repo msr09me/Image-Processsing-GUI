@@ -20,8 +20,10 @@ MainWindow::MainWindow(QWidget *parent)
     menuBar()->addMenu(ui->menuFile);                     // Add File menu first
     menuBar()->addMenu(ui->menuIntensity_Transformation); // Add Intensity Transformation menu second
     menuBar()->addMenu(ui->menuSpatial_Transformation);     // Add Spatial Transformation menu second
+    menuBar()->addMenu(ui->menuConverter);
 
-    ui->GammaSlider->setVisible(false);
+    hideControlElements();
+
 
 
 /*
@@ -46,6 +48,56 @@ MainWindow::~MainWindow()
 
 }
 
+// Functions to hide all the controls ---------------------------------------------------------------------
+
+void MainWindow::hideControlElements() {
+    hideConversionControls();
+    hideGammaSlider();
+    hideKernelSize();
+}
+
+void MainWindow::hideGammaSlider(){
+    ui->GammaSlider->setVisible(false);
+}
+
+void MainWindow::hideKernelSize(){
+    ui->kernelSize->setVisible(false);
+    ui->kernelSizeSlider->setVisible(false);
+    ui->kernelSizeSpinBox->setVisible(false);
+}
+
+
+// Hide the threshold controls (if needed elsewhere)
+void MainWindow::hideConversionControls() {
+    ui->ThresholdLabel->setVisible(false);
+    ui->ThresholdSlider->setVisible(false);
+    ui->ThresholdSpinBox->setVisible(false);
+    ui->ImageConverterPushButton->setVisible(false);
+}
+
+// Function to show control elements ----------------------------------------------------------------------
+
+// Show the threshold controls
+void MainWindow::showConversionControls() {
+    ui->ThresholdLabel->setVisible(true);
+    ui->ThresholdSlider->setVisible(true);
+    ui->ThresholdSpinBox->setVisible(true);
+    ui->ImageConverterPushButton->setVisible(true);
+}
+
+// Show gamma slider
+
+void MainWindow::showGammaSlider() {
+    ui->GammaSlider->setVisible(true);
+}
+
+// Show kernel size elements
+void MainWindow::showkernelSize() {
+    ui->kernelSize->setVisible(true);
+    ui->kernelSizeSlider->setVisible(true);
+    ui->kernelSizeSpinBox->setVisible(true);
+}
+
 // Function to display image
 void MainWindow::updateImageDisplay(const ImageReadResult &image, QLabel *label)
 {
@@ -63,6 +115,7 @@ void MainWindow::updateImageDisplay(const ImageReadResult &image, QLabel *label)
 
 void MainWindow::on_actionLoad_Image_triggered()
 {
+    hideControlElements();
     qDebug() << "on_LoadImagePushButton_clicked called"; // Debug statement
 
     inputImagePath = QFileDialog::getOpenFileName(this, tr("Open Image"), "", tr("BMP Files (*.bmp)"));
@@ -126,6 +179,7 @@ void MainWindow::on_RedoPushushButton_clicked()
 
 
 void MainWindow::on_actionNegative_triggered() {
+    hideControlElements();
     if (!originalImage.buffer) {
         QMessageBox::warning(this, tr("Warning"), tr("Load an image first!"));
         return;
@@ -146,6 +200,7 @@ void MainWindow::on_actionNegative_triggered() {
 }
 
 void MainWindow::on_actionLog_triggered() {
+    hideControlElements();
 
     if (!originalImage.buffer) {
         QMessageBox::warning(this, tr("Warning"), tr("Load an image first!"));
@@ -168,8 +223,9 @@ void MainWindow::on_actionLog_triggered() {
 }
 
 void MainWindow::on_actionGamma_triggered() {
+    hideControlElements();
 
-    ui->GammaSlider->setVisible(true);
+    showGammaSlider();
 
     if (!originalImage.buffer) {
         QMessageBox::warning(this, tr("Warning"), tr("Load an image first!"));
@@ -289,6 +345,8 @@ void MainWindow::applyFilter(FilterType filterType)
 
 void MainWindow::on_actionBox_Filter_triggered()
 {
+    hideControlElements();
+    showkernelSize();
     activeFilter = FilterType::Box;
     applyFilter(activeFilter);
 
@@ -296,6 +354,8 @@ void MainWindow::on_actionBox_Filter_triggered()
 
 void MainWindow::on_actionGaussian_Filter_triggered()
 {
+    hideControlElements();
+    showkernelSize();
     activeFilter = FilterType::Gaussian;
     applyFilter(activeFilter);
 }
@@ -303,6 +363,8 @@ void MainWindow::on_actionGaussian_Filter_triggered()
 
 void MainWindow::on_actionMedian_Filter_triggered()
 {
+    hideControlElements();
+    showkernelSize();
     activeFilter = FilterType::Median;
     applyFilter(activeFilter);
 }
@@ -310,6 +372,7 @@ void MainWindow::on_actionMedian_Filter_triggered()
 
 void MainWindow::on_actionBasic_Laplacian_triggered()
 {
+    hideControlElements();
     qDebug() << "Applying highpass filter with Basic Laplacian";
     previousImage = resultImage;
     highpassFilter(previousImage, resultImage, 1);
@@ -320,6 +383,7 @@ void MainWindow::on_actionBasic_Laplacian_triggered()
 
 void MainWindow::on_actionFull_Laplacian_triggered()
 {
+    hideControlElements();
     qDebug() << "Applying highpass filter with Full Laplacian";
     previousImage = resultImage;
     highpassFilter(previousImage, resultImage, 2);
@@ -330,6 +394,7 @@ void MainWindow::on_actionFull_Laplacian_triggered()
 
 void MainWindow::on_actionBasic_Inverted_Laplacian_triggered()
 {
+    hideControlElements();
     qDebug() << "Applying highpass filter with Basic Inverted Laplacian";
     previousImage = resultImage;
     highpassFilter(previousImage, resultImage, 3);
@@ -340,6 +405,7 @@ void MainWindow::on_actionBasic_Inverted_Laplacian_triggered()
 
 void MainWindow::on_actionFull_Inverted_Laplacian_triggered()
 {
+    hideControlElements();
     qDebug() << "Applying highpass filter with Full Inverted Laplacian";
     previousImage = resultImage;
     highpassFilter(previousImage, resultImage, 4);
@@ -350,6 +416,7 @@ void MainWindow::on_actionFull_Inverted_Laplacian_triggered()
 
 void MainWindow::on_actionSobel_triggered()
 {
+    hideControlElements();
     qDebug() << "Applying highpass filter with Sobel Operator";
     previousImage = resultImage;
     highpassFilter(previousImage, resultImage, 5);
@@ -360,6 +427,7 @@ void MainWindow::on_actionSobel_triggered()
 
 void MainWindow::on_actionBasic_Laplacian_2_triggered()
 {
+    hideControlElements();
     qDebug() << "Applying image sharpening with basic laplacian highpass filter";
     previousImage = resultImage;
     imageSharpening(previousImage, resultImage, 1);
@@ -370,6 +438,7 @@ void MainWindow::on_actionBasic_Laplacian_2_triggered()
 
 void MainWindow::on_actionFull_Laplacian_2_triggered()
 {
+    hideControlElements();
     qDebug() << "Applying image sharpening with full laplacian highpass filter";
     previousImage = resultImage;
     imageSharpening(previousImage, resultImage, 2);
@@ -380,6 +449,7 @@ void MainWindow::on_actionFull_Laplacian_2_triggered()
 
 void MainWindow::on_actionBaisc_Inverted_Laplacian_triggered()
 {
+    hideControlElements();
     qDebug() << "Applying image sharpening with basic inverted laplacian highpass filter";
     previousImage = resultImage;
     imageSharpening(previousImage, resultImage, 3);
@@ -390,6 +460,7 @@ void MainWindow::on_actionBaisc_Inverted_Laplacian_triggered()
 
 void MainWindow::on_actionFull_Inverted_Laplacian_2_triggered()
 {
+    hideControlElements();
     qDebug() << "Applying image sharpening with full inverted laplacian highpass filter";
     previousImage = resultImage;
     imageSharpening(previousImage, resultImage, 4);
@@ -400,6 +471,7 @@ void MainWindow::on_actionFull_Inverted_Laplacian_2_triggered()
 
 void MainWindow::on_actionSobel_2_triggered()
 {
+    hideControlElements();
     qDebug() << "Applying image sharpening with soble highpass filter";
     previousImage = resultImage;
     imageSharpening(previousImage, resultImage, 5);
@@ -412,6 +484,7 @@ void MainWindow::on_actionSobel_2_triggered()
 
 void MainWindow::on_actionUnsharp_Maksing_Highboost_Filtering_triggered()
 {
+    hideControlElements();
     qDebug() << "Applying Unsharp Masking";
     previousImage = resultImage;
 
@@ -420,4 +493,46 @@ void MainWindow::on_actionUnsharp_Maksing_Highboost_Filtering_triggered()
     updateImageDisplay(resultImage, ui->ResultWindowLabel);
     qDebug() << "Completed Unsharp Masking";
 }
+
+// Image Converter -----------------------------------------------------------
+void MainWindow::on_actionGrayscale_to_Binary_triggered()
+{
+    hideControlElements();
+    showConversionControls(); // Show threshold controls
+}
+
+// Slot for slider value change
+void MainWindow::on_ThresholdSlider_valueChanged(int value) {
+    ui->ThresholdSpinBox->blockSignals(true);
+    ui->ThresholdSpinBox->setValue(value); // Sync with spinbox
+    ui->ThresholdSpinBox->blockSignals(false);
+}
+
+// Slot for spinbox value change
+void MainWindow::on_ThresholdSpinBox_valueChanged(int value) {
+    ui->ThresholdSlider->blockSignals(true);
+    ui->ThresholdSlider->setValue(value); // Sync with slider
+    ui->ThresholdSlider->blockSignals(false);
+}
+
+// Slot for Convert button click
+void MainWindow::on_ImageConverterPushButton_clicked() {
+    if (!resultImage.buffer) {
+        QMessageBox::warning(this, tr("Warning"), tr("Load an image first!"));
+        return;
+    }
+
+    int threshold = ui->ThresholdSpinBox->value(); // Get threshold value
+
+    previousImage = resultImage; // store the current result image as previous image
+
+    // Apply grayscale to binary conversion using your algorithm
+    grayscaleToBinary(previousImage, resultImage, threshold);
+
+    // Update the Result Image display
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+    qDebug() << "Completed conversion from grayscale to binary";
+}
+
+
 
