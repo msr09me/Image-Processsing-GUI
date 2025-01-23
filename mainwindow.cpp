@@ -19,8 +19,9 @@ MainWindow::MainWindow(QWidget *parent)
     menuBar()->clear();
     menuBar()->addMenu(ui->menuFile);                     // Add File menu first
     menuBar()->addMenu(ui->menuIntensity_Transformation); // Add Intensity Transformation menu second
-    menuBar()->addMenu(ui->menuSpatial_Transformation);     // Add Spatial Transformation menu second
+    menuBar()->addMenu(ui->menuSpatial_Transformation);     // Add Spatial Transformation menu third
     menuBar()->addMenu(ui->menuConverter);
+    menuBar()->addMenu(ui->menuMorphological);
 
     hideControlElements();
 
@@ -54,6 +55,7 @@ void MainWindow::hideControlElements() {
     hideConversionControls();
     hideGammaSlider();
     hideKernelSize();
+    hideMorphologicalControls();
 }
 
 void MainWindow::hideGammaSlider(){
@@ -73,6 +75,17 @@ void MainWindow::hideConversionControls() {
     ui->ThresholdSlider->setVisible(false);
     ui->ThresholdSpinBox->setVisible(false);
     ui->ImageConverterPushButton->setVisible(false);
+}
+
+void MainWindow::hideMorphologicalControls()
+{
+    ui->mKernelRow->setVisible(false);
+    ui->mKernelColumn->setVisible(false);
+    ui->mKernelSlider->setVisible(false);
+    ui->mkernelSpinBox->setVisible(false);
+    ui->mKernelSlider_2->setVisible(false);
+    ui->mKernelSpinBox2->setVisible(false);
+    ui->applyPushButton->setVisible(false);
 }
 
 // Function to show control elements ----------------------------------------------------------------------
@@ -97,6 +110,19 @@ void MainWindow::showkernelSize() {
     ui->kernelSizeSlider->setVisible(true);
     ui->kernelSizeSpinBox->setVisible(true);
 }
+
+void MainWindow::showMorphologicalControls()
+{
+    ui->mKernelRow->setVisible(true);
+    ui->mKernelColumn->setVisible(true);
+    ui->mKernelSlider->setVisible(true);
+    ui->mkernelSpinBox->setVisible(true);
+    ui->mKernelSlider_2->setVisible(true);
+    ui->mKernelSpinBox2->setVisible(true);
+    ui->applyPushButton->setVisible(true);
+}
+
+// --------------------------------------------------------------------------------------------------------------
 
 // Function to display image
 void MainWindow::updateImageDisplay(const ImageReadResult &image, QLabel *label)
@@ -535,4 +561,110 @@ void MainWindow::on_ImageConverterPushButton_clicked() {
 }
 
 
+// Morphology ---------------------------------------------------------------------------
+
+void MainWindow::on_actionErosion_triggered()
+{
+    hideControlElements();
+    showMorphologicalControls();
+    currentMorphologicalOperation = MorphologicalOperation::Erosion;
+
+}
+
+
+void MainWindow::on_actionDilation_triggered()
+{
+    hideControlElements();
+    showMorphologicalControls();
+    currentMorphologicalOperation = MorphologicalOperation::Dilation;
+}
+
+
+void MainWindow::on_actionOpening_triggered()
+{
+    hideControlElements();
+    showMorphologicalControls();
+    currentMorphologicalOperation = MorphologicalOperation::Opening;
+}
+
+
+void MainWindow::on_actionClosing_triggered()
+{
+    hideControlElements();
+    showMorphologicalControls();
+    currentMorphologicalOperation = MorphologicalOperation::Closing;
+}
+
+
+void MainWindow::on_mKernelSlider_valueChanged(int value)
+{
+    ui->mkernelSpinBox->blockSignals(true);
+    ui->mkernelSpinBox->setValue(value);
+    ui->mkernelSpinBox->blockSignals(false);
+}
+
+
+void MainWindow::on_mkernelSpinBox_valueChanged(int value)
+{
+    ui->mKernelSlider->blockSignals(true);
+    ui->mKernelSlider->setValue(value);
+    ui->mKernelSlider->blockSignals(false);
+}
+
+
+void MainWindow::on_mKernelSlider_2_valueChanged(int value)
+{
+    ui->mKernelSpinBox2->blockSignals(true);
+    ui->mKernelSpinBox2->setValue(value);
+    ui->mKernelSpinBox2->blockSignals(false);
+}
+
+
+void MainWindow::on_mKernelSpinBox2_valueChanged(int value)
+{
+    ui->mKernelSlider_2->blockSignals(true);
+    ui->mKernelSlider_2->setValue(value);
+    ui->mKernelSlider_2->blockSignals(false);
+}
+
+
+void MainWindow::on_applyPushButton_clicked()
+{
+    if (!resultImage.buffer) {
+        QMessageBox::warning(this, tr("Warning"), tr("Load an image first!"));
+        return;
+    }
+
+    int kernelRows = ui->mkernelSpinBox->value();
+    int kernelColumns = ui->mKernelSpinBox2->value();
+
+    previousImage = resultImage; // store the current result image as previous image
+
+    switch (currentMorphologicalOperation) {
+        case MorphologicalOperation::Erosion:
+            qDebug() << "Applying Erosion...";
+            erosion(previousImage, resultImage, kernelColumns, kernelRows);
+            break;
+        case MorphologicalOperation::Dilation:
+            qDebug() << "Applying Dilation...";
+            dilation(previousImage, resultImage, kernelColumns, kernelRows);
+            break;
+        case MorphologicalOperation::Opening:
+            qDebug() << "Applying Opening...";
+            opening(previousImage, resultImage, kernelColumns, kernelRows);
+            break;
+        case MorphologicalOperation::Closing:
+            qDebug() << "Applying Closing...";
+            closing(previousImage, resultImage, kernelColumns, kernelRows);
+            break;
+        default:
+            break;
+    }
+
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+    qDebug() << "Operation completed.";
+
+
+
+}
 

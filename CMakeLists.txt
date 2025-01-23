@@ -40,6 +40,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         styles.qss
         ImageConverter.cpp
         ImageConverter.h
+        ImageMorphology.cpp
+        ImageMorphology.h
     )
 else()
     if(ANDROID)

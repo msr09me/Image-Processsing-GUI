@@ -10,7 +10,8 @@
 #include "ImageFilter.h"
 
 enum FilterType { Box, Gaussian, Median };
-enum kernelType {BasicLaplacian, FullLaplacian, BasicInvertedLaplacian, FullInvertedLaplacian};
+enum KernelType {BasicLaplacian, FullLaplacian, BasicInvertedLaplacian, FullInvertedLaplacian};
+enum class MorphologicalOperation { Erosion, Dilation, Opening, Closing };
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -80,7 +81,25 @@ private slots:
     void on_ImageConverterPushButton_clicked(); // Slot for convert button
 
 
+    // Morphological
 
+    void on_actionErosion_triggered();
+
+    void on_actionDilation_triggered();
+
+    void on_actionOpening_triggered();
+
+    void on_actionClosing_triggered();
+
+    void on_mKernelSlider_valueChanged(int value);
+
+    void on_mkernelSpinBox_valueChanged(int arg1);
+
+    void on_mKernelSlider_2_valueChanged(int value);
+
+    void on_mKernelSpinBox2_valueChanged(int arg1);
+
+    void on_applyPushButton_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -90,11 +109,13 @@ private:
     void hideGammaSlider();             // Hide the gamma slider
     void hideConversionControls();      // Hide conversion elemetns
     void hideKernelSize();              // Hide the kernel size elements
+    void hideMorphologicalControls();   // Hide the morphological control elements
 
     // Helper function to show control elements on the ui
     void showGammaSlider();              // Show the gamma slider
     void showkernelSize();               // Show kernel size elements
     void showConversionControls();       // Show control elements for image conversion
+    void showMorphologicalControls();       // Show control elements for morphological operations
     // Member variables
     QString inputImagePath; // To store the file path of the loaded image
    // QImage originalImage;   // To store the original image
@@ -108,6 +129,8 @@ private:
     FilterType activeFilter = FilterType::Box; // Declare activeFilter here
     void applyFilter(FilterType filterType);
     void updateImageDisplay(const ImageReadResult &image, QLabel *label);
+
+    MorphologicalOperation currentMorphologicalOperation;
 
 
 };

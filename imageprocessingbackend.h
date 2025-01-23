@@ -29,4 +29,10 @@ void umhbf(const ImageReadResult &inputImage, ImageReadResult &outputImage, doub
 
 // Image converters
 void grayscaleToBinary(const ImageReadResult &inputImage, ImageReadResult &outputImage, int threshold);
+
+// Morphology
+void erosion(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows);
+void dilation(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows);
+void opening(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows);
+void closing(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows);
 #endif // IMAGE_PROCESSING_BACKEND_H

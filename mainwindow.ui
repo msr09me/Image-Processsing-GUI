@@ -126,7 +126,7 @@
      <iconset theme="QIcon::ThemeIcon::EditRedo"/>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>570</x>
@@ -172,18 +172,93 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>248</x>
       <y>10</y>
-      <width>187</width>
-      <height>24</height>
+      <width>472</width>
+      <height>28</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayoutKernel">
      <item>
+      <layout class="QHBoxLayout" name="horizontalLayoutMKernel">
+       <item>
+        <widget class="QLabel" name="mKernelSizeLabel">
+         <property name="text">
+          <string>Kernel Size: </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="mKernelRow">
+         <property name="text">
+          <string>rows</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="mKernelSlider">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="sliderPosition">
+          <number>3</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="mkernelSpinBox">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="mKernelColumn">
+         <property name="text">
+          <string>columns</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="mKernelSlider_2">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="sliderPosition">
+          <number>3</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="mKernelSpinBox2">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="applyPushButton">
+         <property name="text">
+          <string>Apply</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
       <widget class="QLabel" name="kernelSize">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="text">
         <string>Kernel Size</string>
        </property>
@@ -309,10 +384,20 @@
     </property>
     <addaction name="actionGrayscale_to_Binary"/>
    </widget>
+   <widget class="QMenu" name="menuMorphological">
+    <property name="title">
+     <string>Morphological</string>
+    </property>
+    <addaction name="actionErosion"/>
+    <addaction name="actionDilation"/>
+    <addaction name="actionOpening"/>
+    <addaction name="actionClosing"/>
+   </widget>
    <addaction name="menuIntensity_Transformation"/>
    <addaction name="menuFile"/>
    <addaction name="menuSpatial_Transformation"/>
    <addaction name="menuConverter"/>
+   <addaction name="menuMorphological"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNegative">
@@ -416,6 +501,26 @@
   <action name="actionGrayscale_to_Binary">
    <property name="text">
     <string>Grayscal to Binary</string>
+   </property>
+  </action>
+  <action name="actionErosion">
+   <property name="text">
+    <string>Erosion</string>
+   </property>
+  </action>
+  <action name="actionDilation">
+   <property name="text">
+    <string>Dilation</string>
+   </property>
+  </action>
+  <action name="actionOpening">
+   <property name="text">
+    <string>Opening</string>
+   </property>
+  </action>
+  <action name="actionClosing">
+   <property name="text">
+    <string>Closing</string>
    </property>
   </action>
  </widget>

@@ -7,6 +7,7 @@
 #include "IntensityTransformations.h"
 #include "ImageFilter.h"
 #include "ImageConverter.h"
+#include "ImageMorphology.h"
 
 // Function to load an image from a file
 #include <algorithm> // For std::reverse
@@ -118,7 +119,7 @@ void umhbf(const ImageReadResult &inputImage, ImageReadResult &outputImage, doub
         outputImage = inputImage; // copy the metadata
         outputImage.buffer = std::make_optional(filteredBuffer);
     } catch (const std::exception &e) {
-        throw std::runtime_error(std::string("Image sharpening failed: ") + e.what());
+        throw std::runtime_error(std::string("Unsharp masking and highboost filtering failed: ") + e.what());
     }
 }
 
@@ -131,6 +132,64 @@ void grayscaleToBinary(const ImageReadResult &inputImage, ImageReadResult &outpu
         outputImage = inputImage; // copy the metadata
         outputImage.buffer = std::make_optional(convertedBuffer);
     } catch (const std::exception &e) {
-        throw std::runtime_error(std::string("Image sharpening failed: ") + e.what());
+        throw std::runtime_error(std::string("Image conversion failed: ") + e.what());
     }
 }
+
+// Morphology
+
+void erosion(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows){
+    if (!inputImage.buffer.has_value() || !inputImage.meta.isValid()) {
+        throw std::invalid_argument("Invalid input image!");
+    }
+    try {
+        auto convertedBuffer = applyErosion(inputImage, kernelCols, kernelRows);
+        outputImage = inputImage;
+        outputImage.buffer = std::make_optional(convertedBuffer);
+    } catch (const std::exception &e) {
+        throw std::runtime_error(std::string("Image erosion failed: ") + e.what());
+    }
+}
+
+void dilation(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows){
+    if (!inputImage.buffer.has_value() || !inputImage.meta.isValid()) {
+        throw std::invalid_argument("Invalid input image!");
+    }
+    try {
+        auto convertedBuffer = applyDilation(inputImage, kernelCols, kernelRows);
+        outputImage = inputImage;
+        outputImage.buffer = std::make_optional(convertedBuffer);
+    } catch (const std::exception &e) {
+        throw std::runtime_error(std::string("Image dilation failed: ") + e.what());
+    }
+}
+
+void opening(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows){
+    if (!inputImage.buffer.has_value() || !inputImage.meta.isValid()) {
+        throw std::invalid_argument("Invalid input image!");
+    }
+    try {
+        auto convertedBuffer = applyOpening(inputImage, kernelCols, kernelRows);
+        outputImage = inputImage;
+        outputImage.buffer = std::make_optional(convertedBuffer);
+    } catch (const std::exception &e) {
+        throw std::runtime_error(std::string("Image opening failed: ") + e.what());
+    }
+}
+
+void closing(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows){
+    if (!inputImage.buffer.has_value() || !inputImage.meta.isValid()) {
+        throw std::invalid_argument("Invalid input image!");
+    }
+    try {
+        auto convertedBuffer = applyClosing(inputImage, kernelCols, kernelRows);
+        outputImage = inputImage;
+        outputImage.buffer = std::make_optional(convertedBuffer);
+    } catch (const std::exception &e) {
+        throw std::runtime_error(std::string("Image closing failed: ") + e.what());
+    }
+}
+
+
+
+
