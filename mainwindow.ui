@@ -108,13 +108,16 @@
      </rect>
     </property>
     <property name="frameShape">
-     <enum>QFrame::Shape::VLine</enum>
+     <enum>QFrame::Shape::NoFrame</enum>
     </property>
     <property name="frameShadow">
-     <enum>QFrame::Shadow::Sunken</enum>
+     <enum>QFrame::Shadow::Plain</enum>
+    </property>
+    <property name="lineWidth">
+     <number>1</number>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="page"/>
     <widget class="QWidget" name="page_5">
@@ -444,6 +447,8 @@
     <addaction name="actionDilation"/>
     <addaction name="actionOpening"/>
     <addaction name="actionClosing"/>
+    <addaction name="separator"/>
+    <addaction name="actionBoundary_Extraction"/>
    </widget>
    <addaction name="menuIntensity_Transformation"/>
    <addaction name="menuFile"/>
@@ -573,6 +578,11 @@
   <action name="actionClosing">
    <property name="text">
     <string>Closing</string>
+   </property>
+  </action>
+  <action name="actionBoundary_Extraction">
+   <property name="text">
+    <string>Boundary Extraction</string>
    </property>
   </action>
  </widget>

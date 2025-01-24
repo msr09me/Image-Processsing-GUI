@@ -35,4 +35,5 @@ void erosion(const ImageReadResult &inputImage, ImageReadResult &outputImage, in
 void dilation(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows);
 void opening(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows);
 void closing(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows);
+void boundaryExtraction(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows);
 #endif // IMAGE_PROCESSING_BACKEND_H

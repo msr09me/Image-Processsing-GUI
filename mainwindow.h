@@ -11,7 +11,7 @@
 
 enum FilterType { Box, Gaussian, Median };
 enum KernelType {BasicLaplacian, FullLaplacian, BasicInvertedLaplacian, FullInvertedLaplacian};
-enum class MorphologicalOperation { Erosion, Dilation, Opening, Closing };
+enum class MorphologicalOperation { Erosion, Dilation, Opening, Closing, BoundaryExtraction };
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -100,6 +100,8 @@ private slots:
     void on_mKernelSpinBox2_valueChanged(int arg1);
 
     void on_applyPushButton_clicked();
+
+    void on_actionBoundary_Extraction_triggered();
 
 private:
     Ui::MainWindow *ui;

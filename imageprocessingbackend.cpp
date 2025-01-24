@@ -190,6 +190,19 @@ void closing(const ImageReadResult &inputImage, ImageReadResult &outputImage, in
     }
 }
 
+void boundaryExtraction(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows){
+    if (!inputImage.buffer.has_value() || !inputImage.meta.isValid()) {
+        throw std::invalid_argument("Invalid input image!");
+    }
+    try {
+        auto convertedBuffer = applyBoundaryExtraction(inputImage, kernelCols, kernelRows);
+        outputImage = inputImage;
+        outputImage.buffer = std::make_optional(convertedBuffer);
+    } catch (const std::exception &e) {
+        throw std::runtime_error(std::string("Boundary extraction failed: ") + e.what());
+    }
+}
+
 
 
 

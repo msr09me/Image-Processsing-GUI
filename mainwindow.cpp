@@ -1,3 +1,4 @@
+// Includes {
 #include <QFileDialog> // For QFileDialog
 #include <QMessageBox> // For QMessageBox
 #include <QImage>      // For QImage
@@ -8,6 +9,10 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "imageprocessingbackend.h"
+
+// }
+
+// Constructors and Desctructors {
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -50,6 +55,10 @@ MainWindow::~MainWindow()
     delete ui;
 
 }
+
+// }
+
+// Helper functions {
 
 // QStack
 void MainWindow::switchToPage(int pageIndex)  //Helper function to switch between pages
@@ -132,6 +141,10 @@ void MainWindow::showMorphologicalControls()
     ui->applyPushButton->setVisible(true);
 }
 
+// }
+
+// Load and display image {
+
 
 // --------------------------------------------------------------------------------------------------------------
 
@@ -174,6 +187,8 @@ void MainWindow::on_actionLoad_Image_triggered()
     updateImageDisplay(originalImage, ui->OriginalWindowLabel);
 }
 
+// }
+
 
 // Undo icon
 
@@ -213,7 +228,7 @@ void MainWindow::on_RedoPushushButton_clicked()
 }
 
 
-
+// Intensity transformation handlers {
 
 void MainWindow::on_actionNegative_triggered() {
     //hideControlElements();
@@ -346,6 +361,12 @@ void MainWindow::on_kernelSizeSpinBox_valueChanged(int value)
 
 }
 
+// }
+
+// Spatial transformation handlers {
+
+// Low pass filter handlers {
+
 
 
 void MainWindow::applyFilter(FilterType filterType)
@@ -410,6 +431,10 @@ void MainWindow::on_actionMedian_Filter_triggered()
     applyFilter(activeFilter);
 }
 
+// }
+
+// High pass filter handlers {
+
 
 void MainWindow::on_actionBasic_Laplacian_triggered()
 {
@@ -464,6 +489,10 @@ void MainWindow::on_actionSobel_triggered()
     updateImageDisplay(resultImage, ui->ResultWindowLabel);
     qDebug() << "Highpass filter with Sobel completed";
 }
+
+// }
+
+// Image sharpening handlers {
 
 
 void MainWindow::on_actionBasic_Laplacian_2_triggered()
@@ -520,6 +549,7 @@ void MainWindow::on_actionSobel_2_triggered()
     qDebug() << "Completed image sharpening with sobel highpass filter";
 }
 
+// }
 
 
 
@@ -535,7 +565,13 @@ void MainWindow::on_actionUnsharp_Maksing_Highboost_Filtering_triggered()
     qDebug() << "Completed Unsharp Masking";
 }
 
+// }
+
+// Image converter handlers {
+
 // Image Converter -----------------------------------------------------------
+
+// Grayscale to Binary handlers {
 void MainWindow::on_actionGrayscale_to_Binary_triggered()
 {
     //hideControlElements();
@@ -576,6 +612,12 @@ void MainWindow::on_ImageConverterPushButton_clicked() {
     qDebug() << "Completed conversion from grayscale to binary";
 }
 
+// }
+
+//}
+
+// Morphological handlers {
+
 
 // Morphology ---------------------------------------------------------------------------
 
@@ -614,6 +656,14 @@ void MainWindow::on_actionClosing_triggered()
     showMorphologicalControls();
     currentMorphologicalOperation = MorphologicalOperation::Closing;
 }
+
+void MainWindow::on_actionBoundary_Extraction_triggered()
+{
+    switchToPage(2);
+    showMorphologicalControls();
+    currentMorphologicalOperation = MorphologicalOperation::BoundaryExtraction;
+}
+
 
 
 void MainWindow::on_mKernelSlider_valueChanged(int value)
@@ -677,14 +727,19 @@ void MainWindow::on_applyPushButton_clicked()
             qDebug() << "Applying Closing...";
             closing(previousImage, resultImage, kernelColumns, kernelRows);
             break;
+        case MorphologicalOperation::BoundaryExtraction:
+            qDebug() << "Applying Boundary Extraction...";
+            boundaryExtraction(previousImage, resultImage, kernelColumns, kernelRows);
+            break;
         default:
             break;
     }
 
     updateImageDisplay(resultImage, ui->ResultWindowLabel);
     qDebug() << "Operation completed.";
-
-
-
 }
+
+// }
+
+
 
