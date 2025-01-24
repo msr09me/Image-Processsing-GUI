@@ -14,34 +14,6 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QSlider" name="GammaSlider">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>160</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>1</number>
-    </property>
-    <property name="maximum">
-     <number>100</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Orientation::Horizontal</enum>
-    </property>
-    <property name="tickPosition">
-     <enum>QSlider::TickPosition::TicksAbove</enum>
-    </property>
-    <property name="tickInterval">
-     <number>1</number>
-    </property>
-   </widget>
    <widget class="QLabel" name="OriginalWindowLabel">
     <property name="geometry">
      <rect>
@@ -126,63 +98,83 @@
      <iconset theme="QIcon::ThemeIcon::EditRedo"/>
     </property>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QStackedWidget" name="stackedWidget">
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>10</y>
-      <width>270</width>
-      <height>26</height>
+      <x>0</x>
+      <y>0</y>
+      <width>1060</width>
+      <height>30</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayoutImageConverter">
-     <item row="0" column="0">
-      <widget class="QLabel" name="ThresholdLabel">
-       <property name="text">
-        <string>Threshold</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QSlider" name="ThresholdSlider">
-       <property name="maximum">
-        <number>255</number>
-       </property>
-       <property name="singleStep">
-        <number>1</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QSpinBox" name="ThresholdSpinBox">
-       <property name="maximum">
-        <number>255</number>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QPushButton" name="ImageConverterPushButton">
-       <property name="text">
-        <string>Convert</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>248</x>
-      <y>10</y>
-      <width>472</width>
-      <height>28</height>
-     </rect>
+    <property name="frameShape">
+     <enum>QFrame::Shape::VLine</enum>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayoutKernel">
-     <item>
+    <property name="frameShadow">
+     <enum>QFrame::Shadow::Sunken</enum>
+    </property>
+    <property name="currentIndex">
+     <number>2</number>
+    </property>
+    <widget class="QWidget" name="page"/>
+    <widget class="QWidget" name="page_5">
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>2</x>
+        <y>3</y>
+        <width>270</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="ThresholdLabel">
+         <property name="text">
+          <string>Threshold</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="ThresholdSlider">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="singleStep">
+          <number>1</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="ThresholdSpinBox">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="ImageConverterPushButton">
+         <property name="text">
+          <string>Convert</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_3">
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>352</width>
+        <height>26</height>
+       </rect>
+      </property>
       <layout class="QHBoxLayout" name="horizontalLayoutMKernel">
        <item>
         <widget class="QLabel" name="mKernelSizeLabel">
@@ -253,41 +245,101 @@
         </widget>
        </item>
       </layout>
-     </item>
-     <item>
-      <widget class="QLabel" name="kernelSize">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="text">
-        <string>Kernel Size</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSlider" name="kernelSizeSlider">
-       <property name="minimum">
-        <number>3</number>
-       </property>
-       <property name="singleStep">
-        <number>5</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="kernelSizeSpinBox">
-       <property name="minimum">
-        <number>3</number>
-       </property>
-       <property name="singleStep">
-        <number>2</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_4">
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>137</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Gamma:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="GammaSlider">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>100</number>
+         </property>
+         <property name="tracking">
+          <bool>true</bool>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="tickPosition">
+          <enum>QSlider::TickPosition::NoTicks</enum>
+         </property>
+         <property name="tickInterval">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_2">
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>1</x>
+        <y>0</y>
+        <width>187</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="kernelSize">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Kernel Size</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="kernelSizeSlider">
+         <property name="minimum">
+          <number>3</number>
+         </property>
+         <property name="singleStep">
+          <number>5</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="kernelSizeSpinBox">
+         <property name="minimum">
+          <number>3</number>
+         </property>
+         <property name="singleStep">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -321,8 +373,8 @@
    <widget class="QMenu" name="menuIntensity_Transformation">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>0</y>
+      <x>303</x>
+      <y>106</y>
       <width>135</width>
       <height>116</height>
      </rect>

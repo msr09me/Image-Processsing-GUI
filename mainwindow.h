@@ -132,6 +132,9 @@ private:
 
     MorphologicalOperation currentMorphologicalOperation;
 
+    // For QStack
+    void switchToPage(int pageIndex);
+
 
 };
 #endif // MAINWINDOW_H

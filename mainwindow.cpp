@@ -23,7 +23,9 @@ MainWindow::MainWindow(QWidget *parent)
     menuBar()->addMenu(ui->menuConverter);
     menuBar()->addMenu(ui->menuMorphological);
 
-    hideControlElements();
+    switchToPage(0);
+
+    //hideControlElements();
 
 
 
@@ -48,6 +50,14 @@ MainWindow::~MainWindow()
     delete ui;
 
 }
+
+// QStack
+void MainWindow::switchToPage(int pageIndex)  //Helper function to switch between pages
+{
+    ui->stackedWidget->setCurrentIndex(pageIndex);
+    qDebug() << "Switching to page:" << pageIndex;
+}
+
 
 // Functions to hide all the controls ---------------------------------------------------------------------
 
@@ -121,6 +131,7 @@ void MainWindow::showMorphologicalControls()
     ui->mKernelSpinBox2->setVisible(true);
     ui->applyPushButton->setVisible(true);
 }
+
 
 // --------------------------------------------------------------------------------------------------------------
 
@@ -205,7 +216,7 @@ void MainWindow::on_RedoPushushButton_clicked()
 
 
 void MainWindow::on_actionNegative_triggered() {
-    hideControlElements();
+    //hideControlElements();
     if (!originalImage.buffer) {
         QMessageBox::warning(this, tr("Warning"), tr("Load an image first!"));
         return;
@@ -226,7 +237,7 @@ void MainWindow::on_actionNegative_triggered() {
 }
 
 void MainWindow::on_actionLog_triggered() {
-    hideControlElements();
+    //hideControlElements();
 
     if (!originalImage.buffer) {
         QMessageBox::warning(this, tr("Warning"), tr("Load an image first!"));
@@ -249,7 +260,8 @@ void MainWindow::on_actionLog_triggered() {
 }
 
 void MainWindow::on_actionGamma_triggered() {
-    hideControlElements();
+    //hideControlElements();
+    switchToPage(3);
 
     showGammaSlider();
 
@@ -371,7 +383,8 @@ void MainWindow::applyFilter(FilterType filterType)
 
 void MainWindow::on_actionBox_Filter_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
+    switchToPage(4);
     showkernelSize();
     activeFilter = FilterType::Box;
     applyFilter(activeFilter);
@@ -380,7 +393,8 @@ void MainWindow::on_actionBox_Filter_triggered()
 
 void MainWindow::on_actionGaussian_Filter_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
+    switchToPage(4);
     showkernelSize();
     activeFilter = FilterType::Gaussian;
     applyFilter(activeFilter);
@@ -389,7 +403,8 @@ void MainWindow::on_actionGaussian_Filter_triggered()
 
 void MainWindow::on_actionMedian_Filter_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
+    switchToPage(4);
     showkernelSize();
     activeFilter = FilterType::Median;
     applyFilter(activeFilter);
@@ -398,7 +413,7 @@ void MainWindow::on_actionMedian_Filter_triggered()
 
 void MainWindow::on_actionBasic_Laplacian_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
     qDebug() << "Applying highpass filter with Basic Laplacian";
     previousImage = resultImage;
     highpassFilter(previousImage, resultImage, 1);
@@ -409,7 +424,7 @@ void MainWindow::on_actionBasic_Laplacian_triggered()
 
 void MainWindow::on_actionFull_Laplacian_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
     qDebug() << "Applying highpass filter with Full Laplacian";
     previousImage = resultImage;
     highpassFilter(previousImage, resultImage, 2);
@@ -420,7 +435,7 @@ void MainWindow::on_actionFull_Laplacian_triggered()
 
 void MainWindow::on_actionBasic_Inverted_Laplacian_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
     qDebug() << "Applying highpass filter with Basic Inverted Laplacian";
     previousImage = resultImage;
     highpassFilter(previousImage, resultImage, 3);
@@ -431,7 +446,7 @@ void MainWindow::on_actionBasic_Inverted_Laplacian_triggered()
 
 void MainWindow::on_actionFull_Inverted_Laplacian_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
     qDebug() << "Applying highpass filter with Full Inverted Laplacian";
     previousImage = resultImage;
     highpassFilter(previousImage, resultImage, 4);
@@ -442,7 +457,7 @@ void MainWindow::on_actionFull_Inverted_Laplacian_triggered()
 
 void MainWindow::on_actionSobel_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
     qDebug() << "Applying highpass filter with Sobel Operator";
     previousImage = resultImage;
     highpassFilter(previousImage, resultImage, 5);
@@ -453,7 +468,7 @@ void MainWindow::on_actionSobel_triggered()
 
 void MainWindow::on_actionBasic_Laplacian_2_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
     qDebug() << "Applying image sharpening with basic laplacian highpass filter";
     previousImage = resultImage;
     imageSharpening(previousImage, resultImage, 1);
@@ -464,7 +479,7 @@ void MainWindow::on_actionBasic_Laplacian_2_triggered()
 
 void MainWindow::on_actionFull_Laplacian_2_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
     qDebug() << "Applying image sharpening with full laplacian highpass filter";
     previousImage = resultImage;
     imageSharpening(previousImage, resultImage, 2);
@@ -475,7 +490,7 @@ void MainWindow::on_actionFull_Laplacian_2_triggered()
 
 void MainWindow::on_actionBaisc_Inverted_Laplacian_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
     qDebug() << "Applying image sharpening with basic inverted laplacian highpass filter";
     previousImage = resultImage;
     imageSharpening(previousImage, resultImage, 3);
@@ -486,7 +501,7 @@ void MainWindow::on_actionBaisc_Inverted_Laplacian_triggered()
 
 void MainWindow::on_actionFull_Inverted_Laplacian_2_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
     qDebug() << "Applying image sharpening with full inverted laplacian highpass filter";
     previousImage = resultImage;
     imageSharpening(previousImage, resultImage, 4);
@@ -497,7 +512,7 @@ void MainWindow::on_actionFull_Inverted_Laplacian_2_triggered()
 
 void MainWindow::on_actionSobel_2_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
     qDebug() << "Applying image sharpening with soble highpass filter";
     previousImage = resultImage;
     imageSharpening(previousImage, resultImage, 5);
@@ -510,7 +525,7 @@ void MainWindow::on_actionSobel_2_triggered()
 
 void MainWindow::on_actionUnsharp_Maksing_Highboost_Filtering_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
     qDebug() << "Applying Unsharp Masking";
     previousImage = resultImage;
 
@@ -523,8 +538,9 @@ void MainWindow::on_actionUnsharp_Maksing_Highboost_Filtering_triggered()
 // Image Converter -----------------------------------------------------------
 void MainWindow::on_actionGrayscale_to_Binary_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
     showConversionControls(); // Show threshold controls
+    switchToPage(1);
 }
 
 // Slot for slider value change
@@ -565,7 +581,8 @@ void MainWindow::on_ImageConverterPushButton_clicked() {
 
 void MainWindow::on_actionErosion_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
+    switchToPage(2);
     showMorphologicalControls();
     currentMorphologicalOperation = MorphologicalOperation::Erosion;
 
@@ -574,7 +591,8 @@ void MainWindow::on_actionErosion_triggered()
 
 void MainWindow::on_actionDilation_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
+    switchToPage(2);
     showMorphologicalControls();
     currentMorphologicalOperation = MorphologicalOperation::Dilation;
 }
@@ -582,7 +600,8 @@ void MainWindow::on_actionDilation_triggered()
 
 void MainWindow::on_actionOpening_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
+    switchToPage(2);
     showMorphologicalControls();
     currentMorphologicalOperation = MorphologicalOperation::Opening;
 }
@@ -590,7 +609,8 @@ void MainWindow::on_actionOpening_triggered()
 
 void MainWindow::on_actionClosing_triggered()
 {
-    hideControlElements();
+    //hideControlElements();
+    switchToPage(2);
     showMorphologicalControls();
     currentMorphologicalOperation = MorphologicalOperation::Closing;
 }
