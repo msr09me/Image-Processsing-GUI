@@ -42,6 +42,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ImageConverter.h
         ImageMorphology.cpp
         ImageMorphology.h
+        ImageEdgeDetection.cpp ImageEdgeDetection.h ImageUtils.cpp ImageUtils.h
     )
 else()
     if(ANDROID)

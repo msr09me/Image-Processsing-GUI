@@ -8,6 +8,8 @@
 #include "ImageFilter.h"
 #include "ImageConverter.h"
 #include "ImageMorphology.h"
+#include "ImageUtils.h"
+#include "ImageEdgeDetection.h"
 
 // Function to load an image from a file
 #include <algorithm> // For std::reverse
@@ -201,6 +203,25 @@ void boundaryExtraction(const ImageReadResult &inputImage, ImageReadResult &outp
     } catch (const std::exception &e) {
         throw std::runtime_error(std::string("Boundary extraction failed: ") + e.what());
     }
+}
+
+// Edge Detection
+
+void gradientEdgeDetection(const ImageReadResult &inputImage, ImageReadResult &outputImage,
+                           KernelChoice kernelChoice, PaddingChoice paddingChoice,
+                           bool applyThreshold, double thresholdValue){
+
+    if (!inputImage.buffer.has_value() || !inputImage.meta.isValid()) {
+        throw std::invalid_argument("Invalid input image!");
+    }
+    try {
+        auto convertedBuffer = applyGradientEdgeDetection(inputImage, kernelChoice, applyThreshold, thresholdValue, paddingChoice);
+        outputImage = inputImage;
+        outputImage.buffer = std::make_optional(convertedBuffer);
+    } catch (const std::exception &e) {
+        throw std::runtime_error(std::string("Boundary extraction failed: ") + e.what());
+    }
+
 }
 
 

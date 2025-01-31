@@ -117,7 +117,7 @@
      <number>1</number>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="page"/>
     <widget class="QWidget" name="page_5">
@@ -174,11 +174,17 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>352</width>
+        <width>663</width>
         <height>26</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayoutMKernel">
+      <layout class="QHBoxLayout" name="horizontalLayoutMKernel" stretch="0,0,0,0,0,0,0,0">
+       <property name="spacing">
+        <number>11</number>
+       </property>
+       <property name="leftMargin">
+        <number>11</number>
+       </property>
        <item>
         <widget class="QLabel" name="mKernelSizeLabel">
          <property name="text">
@@ -343,6 +349,143 @@
       </layout>
      </widget>
     </widget>
+    <widget class="QWidget" name="page_6">
+     <widget class="QSplitter" name="splitter">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>1021</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
+      <widget class="QWidget" name="">
+       <layout class="QHBoxLayout" name="edgeKernelLayout">
+        <item>
+         <widget class="QLabel" name="kernel">
+          <property name="text">
+           <string>Kernel:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="sobelRadioButton">
+          <property name="text">
+           <string>Sobel</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="prewittRadioButton">
+          <property name="text">
+           <string>Prewitt</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="robertsRadioButton">
+          <property name="text">
+           <string>Roberts</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <layout class="QHBoxLayout" name="paddingLayout">
+        <item>
+         <widget class="QLabel" name="padding">
+          <property name="text">
+           <string>Padding: </string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="noPaddingRadioButton">
+          <property name="text">
+           <string>No Padding</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="zeroPaddingRadioButton">
+          <property name="text">
+           <string>Zero</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="replicateRadioButton">
+          <property name="text">
+           <string>Replicate</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="reflectRadioButton">
+          <property name="text">
+           <string>Reflect</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <layout class="QHBoxLayout" name="outputLayout">
+        <item>
+         <widget class="QLabel" name="output">
+          <property name="text">
+           <string>Output: </string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="binaryRadioButton">
+          <property name="text">
+           <string>Binary</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="grayscaleRadioButton">
+          <property name="text">
+           <string>Grayscale</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <layout class="QHBoxLayout" name="thresholdLayout">
+        <item>
+         <widget class="QLabel" name="threshold">
+          <property name="text">
+           <string>Threshold: </string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="thresholdSlider">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="thresholdSpinBox"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QPushButton" name="applyPushButton_2">
+       <property name="text">
+        <string>Apply</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -450,11 +593,18 @@
     <addaction name="separator"/>
     <addaction name="actionBoundary_Extraction"/>
    </widget>
+   <widget class="QMenu" name="menuEdge_Detection">
+    <property name="title">
+     <string>Edge Detection</string>
+    </property>
+    <addaction name="actionGradient_Based"/>
+   </widget>
    <addaction name="menuIntensity_Transformation"/>
    <addaction name="menuFile"/>
    <addaction name="menuSpatial_Transformation"/>
    <addaction name="menuConverter"/>
    <addaction name="menuMorphological"/>
+   <addaction name="menuEdge_Detection"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNegative">
@@ -583,6 +733,11 @@
   <action name="actionBoundary_Extraction">
    <property name="text">
     <string>Boundary Extraction</string>
+   </property>
+  </action>
+  <action name="actionGradient_Based">
+   <property name="text">
+    <string>Gradient Based</string>
    </property>
   </action>
  </widget>

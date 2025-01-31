@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #include "ImageIO.h"
+#include "ImageUtils.h"
 
 
 typedef struct {
@@ -36,4 +37,11 @@ void dilation(const ImageReadResult &inputImage, ImageReadResult &outputImage, i
 void opening(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows);
 void closing(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows);
 void boundaryExtraction(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows);
+
+// Edge Detection
+
+void gradientEdgeDetection(const ImageReadResult &inputImage, ImageReadResult &outputImage,
+                           KernelChoice kernelChoice, PaddingChoice paddingChoice,
+                           bool applyThreshold, double thresholdValue);
+
 #endif // IMAGE_PROCESSING_BACKEND_H

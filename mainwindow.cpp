@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     menuBar()->addMenu(ui->menuSpatial_Transformation);     // Add Spatial Transformation menu third
     menuBar()->addMenu(ui->menuConverter);
     menuBar()->addMenu(ui->menuMorphological);
+    menuBar()->addMenu(ui->menuEdge_Detection);
 
     switchToPage(0);
 
@@ -739,7 +740,84 @@ void MainWindow::on_applyPushButton_clicked()
     qDebug() << "Operation completed.";
 }
 
-// }
 
 
+
+// Edge Detection ---------------------------------------------------------------------------------
+
+// Gradient Based -------------------------------------------------------------
+
+void MainWindow::on_actionGradient_Based_triggered()
+{
+    switchToPage(5);
+}
+
+
+void MainWindow::on_applyPushButton_2_clicked()
+{
+    if (!resultImage.buffer) {
+        QMessageBox::warning(this, "Warning", "Please load an image first!");
+        return;
+    }
+
+    // 1. Determine which kernel is selected
+    KernelChoice kernelChoice;
+    if (ui->sobelRadioButton->isChecked()) {
+        kernelChoice = KernelChoice::SOBEL;
+    } else if (ui->prewittRadioButton->isChecked()) {
+        kernelChoice = KernelChoice::PREWITT;
+    } else if (ui->robertsRadioButton->isChecked()) {
+        kernelChoice = KernelChoice::ROBERTS;
+    } else {
+        QMessageBox::warning(this, "Warning", "Select an edge detection method!");
+        return;
+    }
+
+    // 2. Determine whether to apply thresholding (binary or grayscale output)
+    bool applyThreshold = ui->binaryRadioButton->isChecked();
+    double thresholdValue = ui->thresholdSpinBox->value(); // Read from UI
+
+    // 3. Determine padding choice
+    PaddingChoice paddingChoice;
+    if (ui->noPaddingRadioButton->isChecked()) {
+        paddingChoice = PaddingChoice::NONE;
+    } else if (ui->zeroPaddingRadioButton->isChecked()) {
+        paddingChoice = PaddingChoice::ZERO;
+    } else if (ui->replicateRadioButton->isChecked()) {
+        paddingChoice = PaddingChoice::REPLICATE;
+    } else if (ui->reflectRadioButton->isChecked()) {
+        paddingChoice = PaddingChoice::REFLECT;
+    } else {
+        QMessageBox::warning(this, "Warning", "Select a padding method!");
+        return;
+    }
+
+    // 4. Store the current state for undo
+    previousImage = resultImage;
+
+    // 5. Apply edge detection
+
+    gradientEdgeDetection(previousImage, resultImage, kernelChoice, paddingChoice, applyThreshold, thresholdValue);
+
+    // 6. Update the result display
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+    qDebug() << "Operation completed.";
+
+}
+
+
+void MainWindow::on_thresholdSlider_valueChanged(int value)
+{
+    ui->thresholdSpinBox->blockSignals(true);
+    ui->thresholdSpinBox->setValue(value);
+    ui->thresholdSpinBox->blockSignals(false);
+}
+
+
+void MainWindow::on_thresholdSpinBox_valueChanged(int value)
+{
+    ui->thresholdSlider->blockSignals(true);
+    ui->thresholdSlider->setValue(value);
+    ui->thresholdSlider->blockSignals(false);
+}
 

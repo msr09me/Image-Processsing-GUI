@@ -8,6 +8,7 @@
 
 #include "imageprocessingbackend.h"
 #include "ImageFilter.h"
+#include "ImageUtils.h"
 
 enum FilterType { Box, Gaussian, Median };
 enum KernelType {BasicLaplacian, FullLaplacian, BasicInvertedLaplacian, FullInvertedLaplacian};
@@ -102,6 +103,14 @@ private slots:
     void on_applyPushButton_clicked();
 
     void on_actionBoundary_Extraction_triggered();
+
+    void on_actionGradient_Based_triggered();
+
+    void on_applyPushButton_2_clicked();
+
+    void on_thresholdSlider_valueChanged(int value);
+
+    void on_thresholdSpinBox_valueChanged(int arg1);
 
 private:
     Ui::MainWindow *ui;
