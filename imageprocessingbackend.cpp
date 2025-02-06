@@ -205,7 +205,9 @@ void boundaryExtraction(const ImageReadResult &inputImage, ImageReadResult &outp
     }
 }
 
-// Edge Detection
+// Edge Detection ----------------------------------------------------------------------------
+
+// Gradient based ----------
 
 void gradientEdgeDetection(const ImageReadResult &inputImage, ImageReadResult &outputImage,
                            KernelChoice kernelChoice, PaddingChoice paddingChoice,
@@ -223,6 +225,26 @@ void gradientEdgeDetection(const ImageReadResult &inputImage, ImageReadResult &o
     }
 
 }
+
+// Canny --------------------------
+
+void cannyEdgeDetection(const ImageReadResult &inputImage, ImageReadResult &outputImage,
+                        int lowthreshold, int highThreshold, int kernelSize, double sigma, PaddingChoice paddingChoice){
+
+
+    if (!inputImage.buffer.has_value() || !inputImage.meta.isValid()) {
+        throw std::invalid_argument("Invalid input image!");
+    }
+    try {
+        auto convertedBuffer = applyCannyEdgeDetection(inputImage, lowthreshold, highThreshold, kernelSize, sigma, paddingChoice);
+        outputImage = inputImage;
+        outputImage.buffer = std::make_optional(convertedBuffer);
+    } catch (const std::exception &e) {
+        throw std::runtime_error(std::string("Boundary extraction failed: ") + e.what());
+    }
+}
+
+
 
 
 

@@ -1,4 +1,5 @@
 #include "ImageEdgeDetection.h"
+#include "ImageFilter.h"
 #include <algorithm>       // for std::clamp (C++17) or remove if you have a custom clamp
 #include <cmath>           // for std::sqrt
 #include <cstring>         // for std::memcpy, if needed
@@ -214,6 +215,177 @@ std::vector<uint8_t> applyGradientEdgeDetection(
                 // clamp is a C++17 function in <algorithm>, or write your own
                 scaledVal = std::clamp(scaledVal, 0.0f, 255.0f);
                 output[i] = static_cast<uint8_t>(scaledVal);
+            }
+        }
+    }
+
+    return output;
+}
+
+// Canny Edge Detection ------------------------------------------------------------------------
+
+std::vector<uint8_t> applyCannyEdgeDetection(
+    const ImageReadResult& inputImage,
+    double lowThreshold,
+    double highThreshold,
+    double sigma,
+    int kernelSize,
+    PaddingChoice paddingChoice
+) {
+    if (!inputImage.meta.isValid() || !inputImage.buffer.has_value()) {
+        throw std::invalid_argument("Invalid image or missing buffer!");
+    }
+
+    const uint8_t* buffer = inputImage.buffer->data();
+    const ImageMetadata& meta = inputImage.meta;
+    int rows = meta.height;
+    int cols = meta.width;
+
+    // 1. Gaussian Smoothing
+    std::vector<uint8_t> smoothedBuffer = applyGaussianFilter(inputImage, kernelSize, sigma);
+
+    // 2. Compute Gradients using Sobel Operator
+    int gx[3][3] = {
+        {-1, 0, 1},
+        {-2, 0, 2},
+        {-1, 0, 1}
+    };
+    int gy[3][3] = {
+        {-1, -2, -1},
+        { 0,  0,  0},
+        { 1,  2,  1}
+    };
+
+    std::vector<float> gradientMagnitude(rows * cols, 0.0f);
+    std::vector<float> gradientDirection(rows * cols, 0.0f);
+
+    // Padding the smoothed image
+    std::vector<uint8_t> paddedBuffer;
+    int padSize = 1;
+    int paddedRows = rows + 2 * padSize;
+    int paddedCols = cols + 2 * padSize;
+
+    if (paddingChoice == PaddingChoice::NONE) {
+        paddedBuffer = smoothedBuffer;
+        paddedRows = rows;
+        paddedCols = cols;
+    } else {
+        switch (paddingChoice) {
+            case PaddingChoice::ZERO:
+                paddedBuffer = zeroPadImage(smoothedBuffer, cols, rows, padSize);
+                break;
+            case PaddingChoice::REPLICATE:
+                paddedBuffer = replicatePadImage(smoothedBuffer, cols, rows, padSize);
+                break;
+            case PaddingChoice::REFLECT:
+                paddedBuffer = reflectPadImage(smoothedBuffer, cols, rows, padSize);
+                break;
+            default:
+                throw std::runtime_error("Unsupported padding choice.");
+        }
+    }
+
+    // Lambda to get padded pixel safely
+    auto getPaddedPixel = [&](int r, int c) -> uint8_t {
+        if (r < 0 || r >= paddedRows || c < 0 || c >= paddedCols) {
+            return 0;
+        }
+        return paddedBuffer[r * paddedCols + c];
+    };
+
+    // Compute Gradient Magnitude and Direction
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            float sumX = 0.f;
+            float sumY = 0.f;
+
+            int centerR = i + (paddingChoice == PaddingChoice::NONE ? 0 : padSize);
+            int centerC = j + (paddingChoice == PaddingChoice::NONE ? 0 : padSize);
+
+            for (int ki = -1; ki <= 1; ++ki) {
+                for (int kj = -1; kj <= 1; ++kj) {
+                    uint8_t pixelVal = getPaddedPixel(centerR + ki, centerC + kj);
+                    sumX += pixelVal * gx[ki + 1][kj + 1];
+                    sumY += pixelVal * gy[ki + 1][kj + 1];
+                }
+            }
+
+            gradientMagnitude[i * cols + j] = std::sqrt(sumX * sumX + sumY * sumY);
+            gradientDirection[i * cols + j] = std::atan2(sumY, sumX) * 180 / M_PI;
+        }
+    }
+
+    // 3. Non-Maximum Suppression
+    std::vector<float> suppressed(rows * cols, 0.0f);       // g_N (x, y)
+
+    for (int i = 1; i < rows - 1; ++i) {
+        for (int j = 1; j < cols - 1; ++j) {
+            float angle = gradientDirection[i * cols + j];
+            angle = std::fmod(angle + 180.0, 180.0);  // Normalize angle between 0 and 180
+
+            float magnitude = gradientMagnitude[i * cols + j];
+            float neighbor1 = 0.0f, neighbor2 = 0.0f;
+
+            // Determine neighbors to compare
+            if ((angle >= 0 && angle < 22.5) || (angle >= 157.5 && angle <= 180)) {
+                neighbor1 = gradientMagnitude[i * cols + (j + 1)];
+                neighbor2 = gradientMagnitude[i * cols + (j - 1)];
+            } else if (angle >= 22.5 && angle < 67.5) {
+                neighbor1 = gradientMagnitude[(i + 1) * cols + (j - 1)];
+                neighbor2 = gradientMagnitude[(i - 1) * cols + (j + 1)];
+            } else if (angle >= 67.5 && angle < 112.5) {
+                neighbor1 = gradientMagnitude[(i + 1) * cols + j];
+                neighbor2 = gradientMagnitude[(i - 1) * cols + j];
+            } else if (angle >= 112.5 && angle < 157.5) {
+                neighbor1 = gradientMagnitude[(i - 1) * cols + (j - 1)];
+                neighbor2 = gradientMagnitude[(i + 1) * cols + (j + 1)];
+            }
+
+            if (magnitude >= neighbor1 && magnitude >= neighbor2) {
+                suppressed[i * cols + j] = magnitude;
+            } else {
+                suppressed[i * cols + j] = 0.0f;
+            }
+        }
+    }
+
+    // 4. Double Thresholding
+    std::vector<uint8_t> output(rows * cols, 0);
+    const uint8_t strongEdge = 255;
+    const uint8_t weakEdge = 75;
+
+    for (int i = 0; i < rows * cols; ++i) {
+        if (suppressed[i] >= highThreshold) {
+            output[i] = strongEdge;
+        } else if (suppressed[i] >= lowThreshold) {
+            output[i] = weakEdge;
+        } else {
+            output[i] = 0;
+        }
+    }
+
+    // 5. Edge Tracking by Hysteresis
+    auto isStrongNeighbor = [&](int r, int c) -> bool {
+        for (int dr = -1; dr <= 1; ++dr) {
+            for (int dc = -1; dc <= 1; ++dc) {
+                if (r + dr >= 0 && r + dr < rows && c + dc >= 0 && c + dc < cols) {
+                    if (output[(r + dr) * cols + (c + dc)] == strongEdge) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    };
+
+    for (int i = 1; i < rows - 1; ++i) {
+        for (int j = 1; j < cols - 1; ++j) {
+            if (output[i * cols + j] == weakEdge) {
+                if (isStrongNeighbor(i, j)) {
+                    output[i * cols + j] = strongEdge;
+                } else {
+                    output[i * cols + j] = 0;
+                }
             }
         }
     }

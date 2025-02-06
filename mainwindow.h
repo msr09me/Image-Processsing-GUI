@@ -112,6 +112,18 @@ private slots:
 
     void on_thresholdSpinBox_valueChanged(int arg1);
 
+    void on_actionLaplacian_triggered();
+
+    void on_applyPB_clicked();
+
+    void on_kernelHSlider_valueChanged(int value);
+
+    void on_kernelSpinBox_valueChanged(int value);
+
+    void on_actionCanny_triggered();
+
+    void on_applyPBCanny_clicked();
+
 private:
     Ui::MainWindow *ui;
 

@@ -38,10 +38,17 @@ void opening(const ImageReadResult &inputImage, ImageReadResult &outputImage, in
 void closing(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows);
 void boundaryExtraction(const ImageReadResult &inputImage, ImageReadResult &outputImage, int kernelCols, int kernelRows);
 
-// Edge Detection
+// Edge Detection ----------------------------------------------------------------------------------------
+
+// Gradient based ---------------------------------------------------------------------------
 
 void gradientEdgeDetection(const ImageReadResult &inputImage, ImageReadResult &outputImage,
                            KernelChoice kernelChoice, PaddingChoice paddingChoice,
                            bool applyThreshold, double thresholdValue);
+
+// Canny --------------------------------------------------------------------------------------
+
+void cannyEdgeDetection(const ImageReadResult &inputImage, ImageReadResult &outputImage,
+                        int lowthreshold, int highThreshold, int kernelSize, double sigma, PaddingChoice paddingChoice);
 
 #endif // IMAGE_PROCESSING_BACKEND_H

@@ -821,3 +821,115 @@ void MainWindow::on_thresholdSpinBox_valueChanged(int value)
     ui->thresholdSlider->blockSignals(false);
 }
 
+
+// Edge Detection: Laplacian --------------------------------------------------
+
+void MainWindow::on_actionLaplacian_triggered()
+{
+    switchToPage(6);
+}
+
+
+void MainWindow::on_applyPB_clicked()
+{
+    if (!resultImage.buffer) {
+        QMessageBox::warning(this, "Warning", "Please load an image first!");
+        return;
+    }
+
+    double kernelSize = ui->kernelSpinBox->value();
+    double sigma = ui->sigmaDoubleSpinBox->value();
+    previousImage = resultImage;
+
+    if(ui->gaussianRadioButton->isChecked()) {
+        qDebug() << "Applying Gaussian filter...";
+        gaussianFilter(previousImage, resultImage, kernelSize, sigma);
+        qDebug() << "Gaussian Filter Applied with Kernel Size: " << kernelSize << "and sigma: " << sigma;
+    }
+
+    if (ui->basicLaplacianRadioButton->isChecked()) {
+        qDebug() << "Applying Basic Laplacian...";
+        highpassFilter(previousImage, resultImage, 1);
+        qDebug() << "Basic Laplacian Applied";
+    } else if (ui->fullLaplacianRadioButton->isChecked()) {
+        qDebug() << "Applying Full Laplacian...";
+        highpassFilter(previousImage, resultImage, 2);
+        qDebug() << "Full Laplacian Applied";
+    } else if (ui->basicInvertedLaplacianRadioButton->isChecked()) {
+        qDebug() << "Applying Basic Inverted Laplacian...";
+        highpassFilter(previousImage, resultImage, 3);
+        qDebug() << "Basic Inverted Laplacian Applied";
+    } else if (ui->fullInvertedLaplacianRadioButton->isChecked()) {
+        qDebug() << "Applying Full Inverted Laplacian...";
+        highpassFilter(previousImage, resultImage, 4);
+        qDebug() << "Full Inverted Laplacian Applied";
+    }
+
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+    qDebug() << "Operation completed.";
+
+}
+
+
+
+void MainWindow::on_kernelHSlider_valueChanged(int value)
+{
+    ui->kernelSpinBox->blockSignals(true);
+    ui->kernelSpinBox->setValue(value);
+    ui->kernelSpinBox->blockSignals(false);
+}
+
+void MainWindow::on_kernelSpinBox_valueChanged(int value)
+{
+    ui->kernelHSlider->blockSignals(true);
+    ui->kernelHSlider->setValue(value);
+    ui->kernelHSlider->blockSignals(false);
+}
+
+// Edge Detection: Canny
+
+
+
+void MainWindow::on_actionCanny_triggered()
+{
+    switchToPage(7);
+}
+
+
+void MainWindow::on_applyPBCanny_clicked()
+{
+    if (!resultImage.buffer) {
+        QMessageBox::warning(this, "Warning", "Please load an image first!");
+        return;
+    }
+
+    int kernelSize = ui->kernelSizeSpinBox_2->value();
+    double sigma = ui->sigmaSpinBox->value();
+    double lowThreshold = ui->lowThresholdSpinBox->value();
+    double highThreshold = ui->highThresholdSpinBox->value();
+
+    PaddingChoice paddingChoice;
+    QString selectedPadding = ui->comboBoxPadding->currentText();
+
+    if (selectedPadding == "None") {
+        paddingChoice = PaddingChoice::NONE;
+    } else if (selectedPadding == "Zero") {
+        paddingChoice = PaddingChoice::ZERO;
+    } else if (selectedPadding == "Reflect") {
+        paddingChoice = PaddingChoice::REFLECT;
+    } else if (selectedPadding == "Replicate") {
+        paddingChoice = PaddingChoice::REPLICATE;
+    } else {
+        QMessageBox::warning(this, "Warning", "Invalid padding selection!");
+        return;
+    }
+
+    // Store current image for undo
+    previousImage = resultImage;
+
+    qDebug() << "Performing Canny Edge Detection...";
+    cannyEdgeDetection(previousImage, resultImage, lowThreshold, highThreshold, kernelSize, sigma, paddingChoice);
+    qDebug() << "Canny Edge Detection Completed";
+    updateImageDisplay(resultImage, ui->ResultWindowLabel);
+}
+

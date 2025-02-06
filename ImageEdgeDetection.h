@@ -3,9 +3,8 @@
 
 #include <vector>
 #include <cstdint>
-#include "ImageIO.h"
+#include "ImageIO.h" 
 #include "ImageUtils.h"
-
 
 /**
  * @brief Applies a gradient-based edge detection with optional thresholding & padding.
@@ -22,6 +21,15 @@ std::vector<uint8_t> applyGradientEdgeDetection(
     KernelChoice kernelChoice,
     bool applyThreshold,
     double thresholdValue,
+    PaddingChoice paddingChoice
+);
+
+std::vector<uint8_t> applyCannyEdgeDetection(
+    const ImageReadResult& inputImage,
+    double lowThreshold,
+    double highThreshold,
+    double sigma,
+    int kernelSize,
     PaddingChoice paddingChoice
 );
 
